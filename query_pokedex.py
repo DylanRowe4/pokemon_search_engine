@@ -1,8 +1,13 @@
 import re
 import streamlit as st
+from langchain.document_loaders import PyPDFDirectoryLoader
 from whoosh.fields import Schema, TEXT, ID
 from whoosh.index import create_in, open_dir
 from whoosh.qparser import QueryParser
+
+############################
+##### Query index
+############################
 
 def query_index(index_location, user_query):
     #open index
@@ -22,28 +27,69 @@ def query_index(index_location, user_query):
                                  "text": res['content'], "source": res["file"]})
     return results_list
 
+############################
+##### App Format
+############################
+
 def add_bg_from_url(url):
     st.markdown(
          f"""
          <style>
          .stApp {{
-             color: white;
-             background-image: url({url});
-             background-attachment: fixed;
-             background-size: cover
+         color: white;
+         background-image: url({url});
+         background-attachment: fixed;
+         background-size: cover;
          }}
          p {{
-        color: white;
-        font-weight: bold;
-        }}
-        .st-d6 {{
-        background-color: transparent;
-        }}
+         color: white;
+         font-weight: bold;
+         }}
+         .st-d0 {{
+         background-color: transparent;
+         }}
+         .st-d1 {{
+         background-color: transparent;
+         }}
+         .st-d2 {{
+         background-color: transparent;
+         }}
+         .st-d3 {{
+         background-color: transparent;
+         }}
+         .st-d4 {{
+         background-color: transparent;
+         }}
+         .st-d5 {{
+         background-color: transparent;
+         }}
+         .st-d6 {{
+         background-color: transparent;
+         }}
+         .st-d7 {{
+         background-color: transparent;
+         }}
+         .st-d8 {{
+         background-color: transparent;
+         }}
+         .st-d9 {{
+         background-color: transparent;
+         }}
+         div.stButton > button:first-child {{
+         border-style:solid;
+         border-color: white;
+         border-radius: 50px;
+         background-color: transparent;
+         color: white;
+         }}
+         .uploadedFile {{
+         display: none;
+         }}
          </style>
          """,
          unsafe_allow_html=True
      )
-
+#add backgroun image in formatting
 add_bg_from_url('https://i.redd.it/4ie5mv6bq6ma1.jpg') 
 
 #header image and text
@@ -51,20 +97,16 @@ img_url = 'https://static.wikia.nocookie.net/pokemon-fano/images/6/6f/Poke_Ball.
 header_html = f"""<p style='text-align: center; color: white;font-size:200%'><img src={img_url} width=50 height=50> All Region Pokedex <img src={img_url} width=50 height=50></p>"""
 st.markdown(header_html, unsafe_allow_html=True)
 
-
-#pre-saved database location
-database_loc = st.text_input("Enter the path to the document database.")
-    
 #create a text input box for the user
 prompt = st.text_input('Input search here.')
 
 if prompt:
     #pass the prompt to the LLM
-    response = query_index(database_loc, prompt)
+    response = query_index('Pokedex', prompt)
     #create a new tab for each response
     tab_labels = [re.findall("^.*", find['text'])[0] for find in response]
     tabs = st.tabs(tab_labels)
-    
+
     i = 0
     for tab in tabs:
         with tab:
