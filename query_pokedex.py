@@ -1,6 +1,5 @@
-import re
+import os, re
 import streamlit as st
-from langchain.document_loaders import PyPDFDirectoryLoader
 from whoosh.fields import Schema, TEXT, ID
 from whoosh.index import create_in, open_dir
 from whoosh.qparser import QueryParser
@@ -39,11 +38,12 @@ def add_bg_from_url(url):
          color: white;
          background-image: url({url});
          background-attachment: fixed;
+         opacity: 0.85;
          background-size: cover;
          }}
          p {{
          color: white;
-         font-weight: bold;
+         font-size:110%;
          }}
          .st-d0 {{
          background-color: transparent;
@@ -75,16 +75,6 @@ def add_bg_from_url(url):
          .st-d9 {{
          background-color: transparent;
          }}
-         div.stButton > button:first-child {{
-         border-style:solid;
-         border-color: white;
-         border-radius: 50px;
-         background-color: transparent;
-         color: white;
-         }}
-         .uploadedFile {{
-         display: none;
-         }}
          </style>
          """,
          unsafe_allow_html=True
@@ -103,13 +93,37 @@ prompt = st.text_input('Input search here.')
 if prompt:
     #pass the prompt to the LLM
     response = query_index('Pokedex', prompt)
-    #create a new tab for each response
-    tab_labels = [re.findall("^.*", find['text'])[0] for find in response]
-    tabs = st.tabs(tab_labels)
+    
+    if len(response) > 0:
+        #create a new tab for each response
+        tab_labels = [re.findall("^.*", find['text'])[0] for find in response]
+        tabs = st.tabs(tab_labels)
 
-    i = 0
-    for tab in tabs:
-        with tab:
-            #write it out to the screen
-            st.write(f"{response[i]['text']}")
-            i += 1
+        i = 0
+        for tab in tabs:
+            with tab:
+                #pokemon name
+                pokemon = tab_labels[i].lower().strip()
+                #change galar to galarian for image html
+                pokemon = re.sub('galar', 'galarian', pokemon)
+                pokemon = re.sub('alola', 'alolan', pokemon)
+                pokemon = re.sub('\.', '', re.sub('[ ]+', '-', pokemon))
+                #dynamic url for pokemon image
+                url = f"https://img.pokemondb.net/sprites/home/normal/2x/{pokemon}.jpg"
+
+                #write pokemon image
+                img_html = f"""<center><img style='border:5px solid #000000' src={url} width=150; height=150></center>"""
+
+                #pokemon name
+                clean_name = re.sub('[ ]+', ' ', tab_labels[i].strip())
+                st.write(f"<center><h style='font-size:150%'>{clean_name}<h/></center>", unsafe_allow_html=True)
+                #pokemon image
+                st.markdown(img_html, unsafe_allow_html=True)
+
+                #pokemon stats and information
+                pokemon_name_len = len(tab_labels[i])
+                stats = response[i]['text'][pokemon_name_len:]
+                st.write(f"<center>{stats}</center>", unsafe_allow_html=True)
+                i += 1
+    else:
+        st.write("No results found.")
