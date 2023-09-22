@@ -5,7 +5,7 @@ from whoosh.index import create_in, open_dir
 from whoosh.qparser import QueryParser
 
 ############################
-##### Query index
+##### Query Index
 ############################
 
 def query_index(index_location, user_query):
