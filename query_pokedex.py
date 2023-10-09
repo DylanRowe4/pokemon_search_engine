@@ -123,7 +123,36 @@ if prompt:
                 #pokemon stats and information
                 pokemon_name_len = len(tab_labels[i])
                 stats = response[i]['text'][pokemon_name_len:]
-                st.write(f"<center>{stats}</center>", unsafe_allow_html=True)
+
+                #different bins from pokedex pdfs
+                info_bins = ['Base Stats', 'Basic Information', 'Evolution', 'Size Information', 'Breeding Information',
+                             'Capability List', 'Skill List', 'Move List', 'TM/HM Move List', 'Egg Move List',
+                             'Tutor Move List']
+                
+                stats_string = ""
+                #concatenate all instances we need from the info bins
+                for m in range(len(info_bins)):
+                    try:
+                        if m == len(info_bins) - 1:
+                            #string start location
+                            start = re.search(info_bins[m], stats).start()
+
+                            #concatenate to string
+                            info = re.sub('[ ]*\\n[ ]*', '<br>', stats[start:])
+                            stats_string += f"<br>{info}"
+                        else:
+                            #string start location
+                            start = re.search(info_bins[m], stats).start()
+                            #string end location
+                            end = re.search(info_bins[m+1], stats).start()
+
+                            #concatenate to string
+                            info = re.sub('[ ]*\\n[ ]*', '<br>', stats[start:end])
+                            stats_string += f"<br>{info}<br>"
+                    except AttributeError:
+                        continue
+                        
+                st.write(f"<center>{stats_string}</center>", unsafe_allow_html=True)
                 i += 1
     else:
         st.write("No results found.")
