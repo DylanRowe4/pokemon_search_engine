@@ -132,7 +132,7 @@ if prompt:
                 
                 stats_string = ""
                 
-                if 'Hisui' in response[i]['source']:
+                if ('Hisui' in response[i]['source']) or ('Galar' in response[i]['source']):
                     stats_string = stats
                 else:
                     #concatenate all instances we need from the info bins
