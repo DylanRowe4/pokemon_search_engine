@@ -108,6 +108,7 @@ if prompt:
                 pokemon = re.sub('galar', 'galarian', pokemon)
                 pokemon = re.sub('alola', 'alolan', pokemon)
                 pokemon = re.sub('\.', '', re.sub('[ ]+', '-', pokemon))
+                pokemon = re.sub(r"’", '', pokemon)
                 #dynamic url for pokemon image
                 url = f"https://img.pokemondb.net/sprites/home/normal/2x/{pokemon}.jpg"
 
