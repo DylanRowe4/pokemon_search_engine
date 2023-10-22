@@ -5,7 +5,7 @@ from whoosh.index import create_in, open_dir
 from whoosh.qparser import QueryParser
 
 ############################
-##### Query Index
+##### Query index
 ############################
 
 def query_index(index_location, user_query):
@@ -117,40 +117,45 @@ if prompt:
                 #pokemon name
                 clean_name = re.sub('[ ]+', ' ', tab_labels[i].strip())
                 st.write(f"<center><h style='font-size:150%'>{clean_name}<h/></center>", unsafe_allow_html=True)
+                
                 #pokemon image
                 st.markdown(img_html, unsafe_allow_html=True)
-
-                #pokemon stats and information
-                pokemon_name_len = len(tab_labels[i])
-                stats = response[i]['text'][pokemon_name_len:]
-
+                
                 #different bins from pokedex pdfs
                 info_bins = ['Base Stats', 'Basic Information', 'Evolution', 'Size Information', 'Breeding Information',
                              'Capability List', 'Skill List', 'Move List', 'TM/HM Move List', 'Egg Move List',
                              'Tutor Move List']
                 
+                #pokemon stats and information
+                pokemon_name_len = len(tab_labels[i])
+                stats = response[i]['text'][pokemon_name_len:]
+                
                 stats_string = ""
-                #concatenate all instances we need from the info bins
-                for m in range(len(info_bins)):
-                    try:
-                        if m == len(info_bins) - 1:
-                            #string start location
-                            start = re.search(info_bins[m], stats).start()
+                
+                if 'Hisui' in response[i]['source']:
+                    stats_string = stats
+                else:
+                    #concatenate all instances we need from the info bins
+                    for m in range(len(info_bins)):
+                        try:
+                            if m == len(info_bins) - 1:
+                                #string start location
+                                start = re.search(info_bins[m], stats).start()
 
-                            #concatenate to string
-                            info = re.sub('[ ]*\\n[ ]*', '<br>', stats[start:])
-                            stats_string += f"<br>{info}"
-                        else:
-                            #string start location
-                            start = re.search(info_bins[m], stats).start()
-                            #string end location
-                            end = re.search(info_bins[m+1], stats).start()
+                                #concatenate to string
+                                info = re.sub('[ ]*\\n[ ]*', '<br>', stats[start:])
+                                stats_string += f"<br>{info}"
+                            else:
+                                #string start location
+                                start = re.search(info_bins[m], stats).start()
+                                #string end location
+                                end = re.search(info_bins[m+1], stats).start()
 
-                            #concatenate to string
-                            info = re.sub('[ ]*\\n[ ]*', '<br>', stats[start:end])
-                            stats_string += f"<br>{info}<br>"
-                    except AttributeError:
-                        continue
+                                #concatenate to string
+                                info = re.sub('[ ]*\\n[ ]*', '<br>', stats[start:end])
+                                stats_string += f"<br>{info}<br>"
+                        except AttributeError:
+                            continue
                         
                 st.write(f"<center>{stats_string}</center>", unsafe_allow_html=True)
                 i += 1
