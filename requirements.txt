@@ -1,3 +1,5 @@
 langchain==0.0.226
 streamlit==1.25.0
 Whoosh==2.7.4
+pandas==1.5.3
+openpyxl==3.0.10
