@@ -8,7 +8,7 @@ from whoosh.index import create_in, open_dir
 from whoosh.qparser import QueryParser
 
 #load types chart df
-df = pd.read_excel('Pokemon Type Chart.xlsx')
+df = pd.read_excel('./Data/Pokemon Type Chart.xlsx')
 df = df.set_index(df.columns[0])
 
 ############################
