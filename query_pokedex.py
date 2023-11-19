@@ -155,7 +155,7 @@ if prompt:
                                   'TM/HM Move List', 'Egg Move List', 'Tutor Move List']
                 galar_bins = ['Base Stats', 'Basic Information', 'Evolution', 'Size Information',
                               'Breeding Information', 'Capability List', 'Skill List', 'Move List',
-                              'TM Move List', 'Egg Move List', 'Tutor Move List']
+                              'TM Mov[ ]*e List', 'Egg Move List', 'Tutor Move List']
                 
                 #hisuian specific list
                 hisui_bins = ['Base Stats', 'Basic Information', 'Evolution', 'Size Information', 'Breeding Information',
