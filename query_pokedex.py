@@ -151,15 +151,18 @@ if prompt:
                 
                 #different bins from pokedex pdfs
                 non_hisui_bins = ['Base Stats', 'Basic Information', 'Evolution', 'Size Information',
-                                  'Breeding Information', 'Capability List', 'Skill List', 'Level Up Move List',
+                                  'Breeding Information', 'Capability List', 'Skill List', 'Move List',
                                   'TM/HM Move List', 'Egg Move List', 'Tutor Move List']
+                galar_bins = ['Base Stats', 'Basic Information', 'Evolution', 'Size Information',
+                              'Breeding Information', 'Capability List', 'Skill List', 'Move List',
+                              'TM Move List', 'Egg Move List', 'Tutor Move List']
                 
                 #hisuian specific list
                 hisui_bins = ['Base Stats', 'Basic Information', 'Evolution', 'Size Information', 'Breeding Information',
-                             'Capability List', 'Skill List', 'Level Up Move List', 'Tutor Move List']
+                             'Capability List', 'Skill List', 'Move List', 'Tutor Move List']
                 
                 #list of columns we want to keep
-                keep_bins = ['Evolution', 'Level Up Move List', 'TM/HM Move List', 'Egg Move List', 'Tutor Move List']
+                keep_bins = ['Evolution', 'Move List', 'TM/HM Move List', 'Egg Move List', 'Tutor Move List']
                 
                 #pokemon stats and information
                 pokemon_name_len = len(tab_labels[i])
@@ -193,6 +196,8 @@ if prompt:
                 #list of columns to iterate through
                 if 'Hisui' in response[i]['source']:
                     info_bins = hisui_bins
+                elif 'Galar' in response[i]['source']:
+                    info_bins = galar_bins
                 else:
                     info_bins = non_hisui_bins
                     
