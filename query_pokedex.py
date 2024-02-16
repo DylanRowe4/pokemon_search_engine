@@ -45,14 +45,14 @@ def add_bg_from_url(url):
          f"""
          <style>
          .stApp {{
-         color: black;
+         color: white;
          background-image: url({url});
          background-attachment: fixed;
          opacity: 0.85;
          background-size: cover;
          }}
          p {{
-         color: black;
+         color: white;
          font-size:110%;
          margin: auto;
          }}
@@ -91,8 +91,20 @@ def add_bg_from_url(url):
          background-color: transparent;
          }}
          table {{
-         background-color: transparent;;
+         background-color: transparent;
          font-color: black;
+         }}
+         img.pokeballs {{
+         width:50px;
+         height:50px;
+         background-color: transparent;
+         border:None;
+         }}
+         img {{
+         width:150px;
+         height:150px;
+         border:3px solid #000000;
+         background-color: white;
          }}
          </style>
          """,
@@ -103,7 +115,7 @@ add_bg_from_url('https://i.redd.it/4ie5mv6bq6ma1.jpg')
 
 #header image and text
 img_url = 'https://static.wikia.nocookie.net/pokemon-fano/images/6/6f/Poke_Ball.png'
-header_html = f"""<p style='text-align: center; color: white;font-size:200%'><img src={img_url} width=50 height=50> All Region Pokedex <img src={img_url} width=50 height=50></p>"""
+header_html = f"""<p style='text-align: center; color: white;font-size:200%'><img class='pokeballs' src={img_url}> All Region Pokedex <img class='pokeballs' src={img_url}></p>"""
 st.markdown(header_html, unsafe_allow_html=True)
 
 #create a text input box for the user
@@ -130,9 +142,9 @@ if prompt:
                     pokemon = re.sub(change[0], change[1], pokemon)
                 
                 #dynamic url for pokemon image
-                url = f"https://img.pokemondb.net/sprites/home/normal/2x/{pokemon}.jpg"
+                url = f"https://img.pokemondb.net/sprites/home/normal/{pokemon}.png"
                 #write pokemon image
-                img_html = f"""<center><img style='border:5px solid #000000' src={url} width=150; height=150></center>"""
+                img_html = f"""<center><img src={url}></center>"""
                 
                 #columns to order pokemon name and picture
                 _, name, pic, _ = st.columns([0.25, 0.25, 0.25, 0.25])
@@ -153,6 +165,8 @@ if prompt:
                 non_hisui_bins = ['Base Stats', 'Basic Information', 'Evolution', 'Size Information',
                                   'Breeding Information', 'Capability List', 'Skill List', 'Move List',
                                   'TM/HM Move List', 'Egg Move List', 'Tutor Move List']
+                
+                #bins for galar
                 galar_bins = ['Base Stats', 'Basic Information', 'Evolution', 'Size Information',
                               'Breeding Information', 'Capability List', 'Skill List', 'Move List',
                               'TM Mov[ ]*e List', 'Egg Move List', 'Tutor Move List']
@@ -162,7 +176,8 @@ if prompt:
                              'Capability List', 'Skill List', 'Move List', 'Tutor Move List']
                 
                 #list of columns we want to keep
-                keep_bins = ['Evolution', 'Move List', 'TM/HM Move List', 'Egg Move List', 'Tutor Move List']
+                keep_bins = ['Basic Information', 'Evolution', 'Move List', 'TM/HM Move List',
+                             'TM Mov[ ]*e List', 'Egg Move List', 'Tutor Move List']
                 
                 #pokemon stats and information
                 pokemon_name_len = len(tab_labels[i])
@@ -182,7 +197,7 @@ if prompt:
                 #style defense
                 defense.style.background_gradient("color: transparent;")
                 #write to streamlit
-                st.dataframe(defense, hide_index=True, use_container_width=True, height=80)
+                st.dataframe(defense, hide_index=True, height=90)
                 
                 #start pokemon stats string
                 stats_string = "<center>"
